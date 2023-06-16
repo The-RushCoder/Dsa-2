@@ -1,0 +1,127 @@
+//QuickSort Ascending order
+#include <iostream>
+using namespace std;
+
+int Pivitition(int arr[], int low, int high);
+void QuickSort(int arr[], int low, int high)
+{
+    int pivititionIndex;
+    if(low < high)
+    {
+    Pivitition(arr, low, high);
+    QuickSort(arr, low, pivititionIndex-1);
+    QuickSort(arr, pivititionIndex+1, high);
+    }
+
+}
+
+int Pivitition(int arr[], int low, int high)
+{
+    int pivot, pIndex;
+    pivot = arr[high];
+    pIndex = low;
+
+    for(int i = low; i < high; i++)
+    {
+        if(arr[i] <= pivot)
+        {
+            swap(arr[i], arr[pIndex]);
+            pIndex++;
+        }
+    }
+    swap(arr[pIndex], arr[high]);
+    return pIndex;
+}
+
+
+int main()
+{
+    int n;
+    cout << "Enter the array size: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];    //4 5 6 7 1 3
+    }
+
+    int low = 0;
+    int high = n - 1;
+
+    QuickSort(arr, low, high);
+
+    cout << "Sorted in Ascending order: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+
+
+//QuickSort Descending order
+#include <iostream>
+using namespace std;
+
+int Partition(int arr[], int low, int high);
+void QuickSort(int arr[], int low, int high);
+
+int Partition(int arr[], int low, int high)
+{
+    int pivot = arr[high];
+    int pIndex = low;
+
+    for (int i = low; i < high; i++)
+    {
+        if (arr[i] >= pivot) // Change comparison to >= for descending order
+        {
+            swap(arr[i], arr[pIndex]);
+            pIndex++;
+        }
+    }
+    swap(arr[pIndex], arr[high]);
+    return pIndex;
+}
+
+void QuickSort(int arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pIndex = Partition(arr, low, high);
+        QuickSort(arr, low, pIndex - 1);
+        QuickSort(arr, pIndex + 1, high);
+    }
+}
+
+int main()
+{
+    int n;
+    cout << "Enter the array size: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];     //4 5 6 7 1 3
+    }
+
+    int low = 0;
+    int high = n - 1;
+
+    QuickSort(arr, low, high);
+
+    cout << "Sorted array in descending order: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
