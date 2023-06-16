@@ -1,0 +1,69 @@
+//DNC Maximum Minimum
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void MaxMin(int arr[], int i, int j, int& maX, int& miN)
+{
+    if (i == j)
+    {
+        maX = arr[i];
+        miN = arr[i];
+        return;
+    }
+
+    if (i == j - 1)
+    {
+        if (arr[i] < arr[j])
+        {
+            maX = arr[j];
+            miN = arr[i];
+        }
+        else
+        {
+            maX = arr[i];
+            miN = arr[j];
+        }
+        return;
+    }
+
+    int mid = (i + j) / 2;
+    int maX1, miN1;
+    MaxMin(arr, i, mid, maX, miN);
+    MaxMin(arr, mid + 1, j, maX1, miN1);
+    if (maX1 > maX)
+    {
+        maX = maX1;
+    }
+    if (miN1 < miN)
+    {
+        miN = miN1;
+    }
+}
+
+int main()
+{
+    int n, i, j, maX, miN;
+    cout << "Enter the array size: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    i= 0;
+    j= n-1;
+    maX = arr[0];
+    miN = arr[0];
+
+
+    MaxMin(arr, i, j, maX, miN);
+
+    cout << "Maximum: " << maX << endl;
+    cout << "Minimum: " << miN << endl;
+
+    return 0;
+}
