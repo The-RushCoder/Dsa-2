@@ -1,0 +1,96 @@
+//Count Inversion
+#include <iostream>
+using namespace std;
+
+int Merge(int arr[], int low, int mid, int high);
+
+int MergeSort(int arr[], int low, int high)
+{
+    int inv = 0;
+    if (low < high)
+    {
+        int mid = (low + high) / 2;
+
+        inv += MergeSort(arr, low, mid);
+        inv += MergeSort(arr, mid + 1, high);
+        inv += Merge(arr, low, mid, high);
+    }
+    return inv;
+}
+
+int Merge(int arr[], int low, int mid, int high)
+{
+    int inv = 0;
+    int i = low;
+    int j = mid + 1;
+    int k = low;
+    int arr2[high + 1]; // Temporary array for merging
+
+    while (i <= mid && j <= high)
+    {
+        if (arr[i] < arr[j])
+        {
+            arr2[k] = arr[i];
+            i++;
+        }
+        else
+        {
+            arr2[k] = arr[j];
+            inv += (mid - i + 1);
+            j++;
+        }
+        k++;
+    }
+
+    while (i <= mid)
+    {
+        arr2[k] = arr[i];
+        i++;
+        k++;
+    }
+
+    while (j <= high)
+    {
+        arr2[k] = arr[j];
+        j++;
+        k++;
+    }
+
+    // Copy back the merged elements from arr2 to arr
+    for (int x = low; x <= high; x++)
+    {
+        arr[x] = arr2[x];
+    }
+
+    return inv;
+}
+
+int main()
+{
+    int n;
+    cout << "Enter the array size: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    int low = 0;
+    int high = n - 1;
+
+    int inversions = MergeSort(arr, low, high);
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    cout << "Number of inversions: " << inversions << endl;
+
+    return 0;
+}
