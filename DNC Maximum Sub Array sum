@@ -1,0 +1,73 @@
+//Maximum Sub Array sum
+#include <iostream>
+#include <climits> // Required for INT_MIN
+using namespace std;
+
+int Max_Crossing_Sum(int arr[], int l, int m, int h);
+int Max_Subarray_Sum(int arr[], int l, int h);
+
+int Max_Crossing_Sum(int arr[], int l, int m, int h)
+{
+    int left_sum = INT_MIN;
+    int sum = 0;
+    for (int i = m; i >= l; i--)
+    {
+        sum = sum + arr[i];
+        if (sum > left_sum)
+            left_sum = sum;
+    }
+    printf("Left sum: %d\n", left_sum);
+
+    int right_sum = INT_MIN;
+    sum = 0;
+    for (int j = m + 1; j <= h; j++)
+    {
+        sum = sum + arr[j];
+        if (sum > right_sum)
+            right_sum = sum;
+    }
+    printf("Right sum: %d\n", right_sum);
+
+    return max(left_sum + right_sum, max(left_sum, right_sum)); // Fix the max() usage
+}
+
+int Max_Subarray_Sum(int arr[], int l, int h)
+{
+    if (l == h)
+    {
+        return arr[l]; // Return arr[l] instead of arr[0]
+    }
+    int m = (l + h) / 2;
+    int lss = Max_Subarray_Sum(arr, l, m);
+    int rss = Max_Subarray_Sum(arr, m + 1, h);
+    int css = Max_Crossing_Sum(arr, l, m, h);
+
+    return max(lss, max(rss, css)); // Simplify the condition
+}
+
+int main()
+{
+    int n;
+    cout << "Enter the array size: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    int max_sum = Max_Subarray_Sum(arr, 0, n - 1); // Assign the result to a variable
+
+    cout << "Maximum subarray sum: " << max_sum << endl;
+
+    cout << "Sorted array in descending order: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
