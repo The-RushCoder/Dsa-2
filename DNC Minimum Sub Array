@@ -1,0 +1,71 @@
+
+#include <iostream>
+#include <climits> // Required for INT_MAX
+using namespace std;
+
+int Min_Crossing_Sum(int arr[], int l, int m, int h);
+int Min_Subarray_Sum(int arr[], int l, int h);
+
+int Min_Crossing_Sum(int arr[], int l, int m, int h)
+{
+    int left_sum = INT_MAX;
+    int sum = 0;
+    for (int i = m; i >= l; i--)
+    {
+        sum = sum + arr[i];
+        if (sum < left_sum)
+            left_sum = sum;
+    }
+
+    int right_sum = INT_MAX;
+    sum = 0;
+    for (int j = m + 1; j <= h; j++)
+    {
+        sum = sum + arr[j];
+        if (sum < right_sum)
+            right_sum = sum;
+    }
+
+    return min(left_sum + right_sum, min(left_sum, right_sum));
+}
+
+int Min_Subarray_Sum(int arr[], int l, int h)
+{
+    if (l == h)
+    {
+        return arr[l];
+    }
+    int m = (l + h) / 2;
+    int lss = Min_Subarray_Sum(arr, l, m);
+    int rss = Min_Subarray_Sum(arr, m + 1, h);
+    int css = Min_Crossing_Sum(arr, l, m, h);
+
+    return min(lss, min(rss, css));
+}
+
+int main()
+{
+    int n;
+    cout << "Enter the array size: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the array elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    int min_sum = Min_Subarray_Sum(arr, 0, n - 1);
+
+    cout << "Minimum subarray sum: " << min_sum << endl;
+
+    cout << "Sorted array in ascending order: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
