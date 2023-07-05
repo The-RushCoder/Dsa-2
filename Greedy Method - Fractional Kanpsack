@@ -1,0 +1,90 @@
+//Fractional Kanpsack
+/*
+7
+15
+10 2
+5 3
+15 5
+7 7
+6 1
+18 4
+3 1
+*/
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Item {
+    int name;
+    double value;
+    double weight;
+    double vpw;
+    double portion;
+};
+
+bool compare_items(Item item1, Item item2) {
+    return item1.vpw > item2.vpw;
+}
+
+void fractional_knapsack(double values[], double weights[], int nItems, double sack_size) {
+    Item all_items[nItems];
+    for(int i=0; i<nItems; i++) {
+        all_items[i].name = i;
+        all_items[i].value = values[i];
+        all_items[i].weight = weights[i];
+        all_items[i].portion = 0;
+        all_items[i].vpw = values[i]/weights[i];
+    }
+
+    sort(all_items, all_items+nItems, compare_items);
+
+    cout << "Items after sorting " << endl;
+    for(int j=0; j<nItems; j++) {
+        cout << "Item: " << all_items[j].name
+        << "   Value: " << all_items[j].value
+        << "    Weight: " << all_items[j].weight
+        << "   v/w: " << all_items[j].vpw << endl;
+    }
+
+    double rem = sack_size;
+    double cur_weight = 0;
+    double final_value = 0;
+
+    for (int i = 0; i < nItems; i++) {
+
+        // If adding Item won't overflow,
+        // add it completely
+        if (cur_weight + all_items[i].weight <= sack_size) {
+
+            cur_weight += all_items[i].weight;
+            final_value += all_items[i].value;
+
+
+            all_items[i].portion = min(1.0, rem/all_items[i].weight);
+            rem = sack_size - cur_weight;
+
+            cout << "Final Value " << final_value << "    Rem  " << rem
+            << "    Name " << all_items[i].name << "  Portion " << all_items[i].portion << endl;
+        }
+
+        // If we can't add current Item,
+        // add fractional part of it
+        else {
+            final_value += all_items[i].value* ((double)rem/ all_items[i].weight);
+            cur_weight = cur_weight + (rem *all_items[i].weight / all_items[i].weight);
+
+            all_items[i].portion = min(1.0, rem/all_items[i].weight);
+            rem = sack_size - cur_weight;
+
+            cout << "Final Value " << final_value << "    Rem  " << rem
+            << "    Name " << all_items[i].name << "  Portion " << all_items[i].portion << endl;
+
+            break;
+        }
+
+    }
+
+    cout <<"Final Value: "<< final_value << endl;
+
+    return;
+
+}
