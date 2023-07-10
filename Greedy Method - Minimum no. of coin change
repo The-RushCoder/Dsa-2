@@ -1,0 +1,54 @@
+/*
+3
+1
+3
+7
+12
+*/
+#include<bits/stdc++.h>
+using namespace std;
+
+void minCoins(int coins[], int n, int amount)
+{
+    int ans = 0;
+    int remain = amount;
+
+    sort(coins, coins + n, greater<int>());
+    printf("\nAfter sorting coins:\n");
+
+    for(int i=0; i<n; i++)
+    {
+        printf("Coin %d Value: %d\n", i+1, coins[i]);
+    }
+
+    for(int i=0; i<n; i++)
+    {
+        ans += remain / coins[i];
+        remain %= coins[i];
+    }
+
+    cout <<"\nMinimum Coin Change: "<< ans << endl;
+
+    return;
+}
+
+int main() {
+    int n;
+    printf("Enter the number of coins: ");
+    cin >> n;
+
+    int coins[n];
+    for(int i=0; i<n; i++)
+    {
+        printf("Enter the Value of coin %d: ", i+1);
+        cin >> coins[i];
+    }
+
+    int amount;
+    printf("Enter the target amount: ");
+    cin >> amount;
+
+    minCoins(coins, n, amount);
+
+    return 0;
+}
