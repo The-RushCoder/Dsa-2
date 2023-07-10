@@ -88,3 +88,25 @@ void fractional_knapsack(double values[], double weights[], int nItems, double s
     return;
 
 }
+
+int main() {
+    int n, sack_size;
+    cout << "Enter the number of Objects: ";
+    cin >> n;
+    cout << "Enter the amount of Sack Size: ";
+    cin>>sack_size;
+
+    double values[n];
+    double weights[n];
+
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter your product %d Values & Weights: ", i+1);
+        cin >> values[i] >> weights[i];
+    }
+
+
+    fractional_knapsack(values, weights, n, sack_size);
+
+    return 0;
+}
