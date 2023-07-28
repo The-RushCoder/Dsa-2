@@ -1,0 +1,73 @@
+//Dijkstra's algorithm
+//Shortest path
+#include <bits/stdc++.h>
+using namespace std;
+const int inf = 1e7;
+
+
+vector<int> dijkstra(const vector<vector<pair<int, int>>>& graph, int source, int num_vertices) {
+    vector<int> dist(num_vertices + 1, inf);
+    set<pair<int, int>> seT;
+
+    dist[source] = 0;
+    seT.insert({0, source});
+
+    while (!seT.empty()) {
+        auto x = *(seT.begin());
+        seT.erase(x);
+
+        for (auto it : graph[x.second]) {
+            if (dist[it.first] > dist[x.second] + it.second) {
+                seT.erase({dist[it.first], it.first});
+                dist[it.first] = dist[x.second] + it.second;
+                seT.insert({dist[it.first], it.first});
+            }
+        }
+    }
+
+    return dist;
+}
+
+int main() {
+    int ver, ed, source;
+    printf("Enter the number of vertices and edges: ");
+    cin >> ver >> ed;
+
+    vector<vector<pair<int, int>>> graph(ver + 1);
+
+    printf("\nEnter the edges in the format: 'from to weight'\n");
+    for (int i = 0; i < ed; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+        graph[v].push_back({u, w}); //if the graph is directed then remove only this line
+    }
+
+    printf("Enter the source vertex: ");
+    cin >> source;
+
+    vector<int> shortest_distances = dijkstra(graph, source, ver);
+
+    for (int i = 0; i < ver; i++) {
+        if (shortest_distances[i] < inf) {
+            cout << shortest_distances[i] << " ";
+        } else {
+            cout << -1 << " ";
+        }
+    }
+
+    return 0;
+}
+/*
+6 9
+0 1 4
+0 2 1
+1 2 2
+1 3 5
+2 3 2
+2 4 1
+3 4 3
+3 5 7
+4 5 2
+0
+*/
