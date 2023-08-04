@@ -1,4 +1,4 @@
-//Prims Algoritham
+//Prims Algorithm
 #include <bits/stdc++.h>
 using namespace std;
 const int inf = 1e7;
