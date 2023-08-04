@@ -1,9 +1,12 @@
 //kruskal’s MST
-#include <iostream>
-#include <vector>
-#include <algorithm>
 
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+
+#include <bits/stdc++.h>
 using namespace std;
+
 
 // Structure to represent an edge
 struct Edge {
