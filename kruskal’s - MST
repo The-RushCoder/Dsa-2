@@ -1,0 +1,92 @@
+//kruskal’s MST
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Structure to represent an edge
+struct Edge {
+    int src, dest, weight;
+};
+
+// Structure to represent a disjoint set
+struct DisjointSet {
+    vector<int> parent, rank;
+
+    DisjointSet(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+        for (int i = 0; i < n; ++i)
+            parent[i] = i;
+    }
+
+    int find(int x) {
+        if (x != parent[x])
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    void unionSets(int x, int y) {
+        int x_root = find(x);
+        int y_root = find(y);
+
+        if (x_root == y_root)
+            return;
+
+        if (rank[x_root] < rank[y_root])
+            parent[x_root] = y_root;
+        else if (rank[x_root] > rank[y_root])
+            parent[y_root] = x_root;
+        else {
+            parent[y_root] = x_root;
+            rank[x_root]++;
+        }
+    }
+};
+
+// Comparator function to sort edges based on weight
+bool compareEdges(const Edge& a, const Edge& b) {
+    return a.weight < b.weight;
+}
+
+// Function to find the MST using Kruskal's algorithm
+vector<Edge> kruskalMST(vector<Edge>& edges, int ver)
+{
+    sort(edges.begin(), edges.end(), compareEdges);
+
+    vector<Edge> result;
+    DisjointSet ds(ver);
+
+    for (const auto& edge : edges) {
+        int src = edge.src;
+        int dest = edge.dest;
+
+        if (ds.find(src) != ds.find(dest)) {
+            result.push_back(edge);
+            ds.unionSets(src, dest);
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    int ver, ed; // ver: number of vertices, ed: number of edges
+    cout << "Enter the number of vertices & edges: ";
+    cin >> ver >> ed;
+
+    vector<Edge> edges(ed); //create a vector for input
+    cout << "Enter edges (source, destination, weight):\n";
+    for (int i = 0; i < ed; ++i)
+    {
+        cin >> edges[i].src >> edges[i].dest >> edges[i].weight;
+    }
+    vector<Edge> MST = kruskalMST(edges, ver);
+
+    cout << "Minimum Spanning Tree (MST) edges:\n";
+    for (const auto& edge : MST)
+        cout << edge.src << " -- " << edge.dest << " : " << edge.weight << "\n";
+
+    return 0;
+}
