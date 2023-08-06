@@ -146,3 +146,81 @@ int main() {
     return 0;
 }
 
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+const double inf = 1e7; // Change the type to double for probability
+const double EPS = 1e-5; // Define a small epsilon value for floating-point comparisons
+
+vector<double> dijkstra(const vector<vector<pair<int, double>>>& graph, int source, int num_vertices) {
+    vector<double> prob(num_vertices, 0.0);
+    prob[source] = 1.0; // Probability of starting node is 1.0
+
+    priority_queue<pair<double, int>> pq;
+    pq.push({1.0, source});
+
+    while (!pq.empty()) {
+        auto current = pq.top();
+        pq.pop();
+
+        double current_prob = current.first;
+        int node = current.second;
+
+        if (current_prob < prob[node] - EPS) {
+            continue; // Skip outdated entries
+        }
+
+        for (auto neighbor : graph[node]) {
+            int next_node = neighbor.first;
+            double edge_prob = neighbor.second;
+            double new_prob = current_prob * edge_prob;
+
+            if (new_prob > prob[next_node] + EPS) {
+                prob[next_node] = new_prob;
+                pq.push({new_prob, next_node});
+            }
+        }
+    }
+
+    return prob;
+}
+
+int main() {
+    int ver, ed, start, end;
+    printf("Enter the number of vertices and edges: ");
+    cin >> ver >> ed;
+
+    vector<vector<pair<int, double>>> graph(ver);
+
+    printf("\nEnter the edges in the format: 'from to probability'\n");
+    for (int i = 0; i < ed; i++) {
+        int u, v;
+        double p;
+        cin >> u >> v >> p;
+        graph[u].push_back({v, p});
+        graph[v].push_back({u, p}); // Undirected graph
+    }
+
+    printf("Enter the start and end vertices: ");
+    cin >> start >> end;
+
+    vector<double> max_probs = dijkstra(graph, start, ver);
+    double max_prob = max_probs[end];
+
+    if (max_prob < EPS) {
+        cout << "No path from start to end.\n";
+    } else {
+        cout << "Maximum success probability: " << fixed << setprecision(5) << max_prob << "\n";
+    }
+
+    return 0;
+}
+
+
