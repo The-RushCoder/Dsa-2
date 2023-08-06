@@ -71,3 +71,78 @@ int main() {
 4 5 2
 0
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// minimum time it takes for all the n nodes to receive the signal.
+#include <bits/stdc++.h>
+using namespace std;
+
+const int inf = 1e7;
+
+int networkDelayTime(vector<vector<pair<int, int>>>& graph, int n, int k) {
+    vector<int> dist(n + 1, inf);
+    dist[k] = 0;
+    set<pair<int, int>> pq;
+    pq.insert({0, k});
+
+    while (!pq.empty()) {
+        auto [time, node] = *(pq.begin());
+        pq.erase(pq.begin());
+
+        for (auto& neighbor : graph[node]) {
+            int v = neighbor.first;
+            int w = neighbor.second;
+            if (dist[v] > dist[node] + w) {
+                pq.erase({dist[v], v});
+                dist[v] = dist[node] + w;
+                pq.insert({dist[v], v});
+            }
+        }
+    }
+
+    int maxTime = 0;
+    for (int i = 1; i <= n; i++) {
+        if (dist[i] == inf) return -1; // There's a disconnected node
+        maxTime = max(maxTime, dist[i]);
+    }
+
+    return maxTime;
+}
+
+int main() {
+    int n, edges, source;
+    printf("Enter the number of vertices and edges: ");
+    cin >> n >> edges;
+
+    vector<vector<pair<int, int>>> graph(n + 1);
+
+    printf("\nEnter the edges in the format: 'from to weight'\n");
+    for (int i = 0; i < edges; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+        // If the graph is directed, keep the line above; otherwise, remove it.
+    }
+
+    printf("Enter the source vertex: ");
+    cin >> source;
+
+    int minTime = networkDelayTime(graph, n, source);
+
+    cout << "Minimum time for all nodes to receive signal: " << minTime << endl;
+
+    return 0;
+}
+
